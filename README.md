@@ -37,6 +37,20 @@ Pour évaluer votre projet merci de compléter ce README avec les informations s
 
 * *Lien vers la documentation du projet*
 
+  Code SQL pour calculer les CDD et CDI :
+  select cdi, cdd, handicap, count(*) from (select max(ind_cdi) as cdi, max(ind_cdd) as cdd, max(ind_handicap) as handicap, id_assure from (
+			select id_assure,
+			case when nature_contrat in ('01', ' 08', '09') then 1 else 0 end as ind_cdi,
+			case when nature_contrat in ('02', '03', '10') then 1 else 0 end as ind_cdd,
+			case when d.statut_boeth is not null then 1 else 0 end as ind_handicap
+			from ddadtemployeur_assure as c 
+			inner join ddadtcontrat as d 
+			on c.id = d.id_employeur_assure
+			) 
+		group by id_assure) group by cdi, cdd, handicap ;
+
+  
+
 ### [Facultatif] Retours sur la qualité des données exploitées
 
 * *Quelles sont les difficultés que vous avez rencontrées dans l’usage des données ?*
