@@ -100,8 +100,9 @@ df_motif_rupture_cdi <- tbl_contrat_join |>
   collect()
 
 ## Quotité de travail -----------------------------------------------------
+# filtre sur CDD/CDI car pas obligatoire en intérim
 df_tps_travail <- tbl_contrat_join |>
-  group_by(modalite_temps) |>
+  group_by(nature_contrat, modalite_temps) |>
   summarise(
     n_contrat = n(),
     n_contrat_boeth_assure = sum(is_boeth_assure),
